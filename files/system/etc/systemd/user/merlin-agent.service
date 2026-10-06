@@ -1,0 +1,16 @@
+[Unit]
+Description=Merlin box agent bridge (muse.ai task poll loop)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/merlin-agent.py
+Restart=always
+RestartSec=30
+Environment=MUSE_NO_UPDATE_CHECK=1
+Environment=CI=1
+# No inbound ports. The daemon only polls out through muse-cli.
+
+[Install]
+WantedBy=default.target
