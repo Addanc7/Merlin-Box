@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Run with Proton
+Comment=Run Windows executables through Proton (umu-launcher)
+Exec=umu-run %f
+Terminal=false
+NoDisplay=true
+MimeType=application/x-ms-dos-executable;application/x-dosexec;
+Categories=System;
