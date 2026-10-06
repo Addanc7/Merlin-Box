@@ -1,0 +1,3 @@
+[Default Applications]
+application/x-ms-dos-executable=umu-run-exe.desktop
+application/x-dosexec=umu-run-exe.desktop
