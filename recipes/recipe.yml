@@ -1,0 +1,52 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+
+# Image will be published to ghcr.io/<your-user>/merlin-box
+name: merlin-box
+
+description: "Merlin's dedicated agent rig — Bazzite-based KDE desktop, Nvidia, Proton for .exe files, always-on."
+
+# Bazzite with Nvidia drivers baked in (the Omen's GTX 1050 Ti is Pascal, still supported).
+# ghcr.io/ublue-os/bazzite-nvidia is the KDE Plasma variant.
+base-image: ghcr.io/ublue-os/bazzite-nvidia
+image-version: latest
+
+modules:
+  # Overlay files from files/system/ into the image root.
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  # Extra packages baked into the image.
+  - type: dnf
+    install:
+      packages:
+        - tmux
+        - htop
+        - nvtop
+        - git
+        - python3-pip
+        - python3-virtualenv
+        - openssh-server
+        - wireguard-tools
+        - direnv
+
+  # Proton for .exe files: umu-launcher runs any Windows executable
+  # through Proton outside Steam. Double-clicking an .exe uses it
+  # (see files/system/usr/share/applications/umu-run-exe.desktop).
+  - type: script
+    scripts:
+      - install-umu.sh
+
+  # Services to enable at build time.
+  - type: systemd
+    system:
+      enabled:
+        - sshd
+        - merlin-firstboot.service
+
+  # NOTE: shipping v1 unsigned so no signing keys are needed.
+  # `rpm-ostree upgrade` still works (unverified). To get verified
+  # upgrades later: generate a cosign keypair, add the `signing`
+  # module back, and set SIGNING_SECRET.
