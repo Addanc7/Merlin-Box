@@ -1,0 +1,13 @@
+[Unit]
+Description=Merlin box first-boot setup (one-shot)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!/var/lib/merlin-firstboot.done
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/merlin-firstboot.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
